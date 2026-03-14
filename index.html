@@ -313,6 +313,10 @@
   <div class="category-grid" id="categoryGrid"></div>
 
   <div id="voiceInfo" style="color:var(--text-dim);font-size:0.85em;"></div>
+  <details style="color:var(--text-dim);font-size:0.75em;max-width:400px;width:100%;">
+    <summary>Show all available voices</summary>
+    <div id="allVoices" style="max-height:200px;overflow-y:auto;text-align:left;padding:8px;background:var(--card);border-radius:8px;margin-top:6px;"></div>
+  </details>
   <button class="big-btn" onclick="startGame()">Let's Go!</button>
 </div>
 
@@ -569,6 +573,15 @@ function updateVoiceInfo() {
     el.textContent = 'Voice: ' + chosenVoice.name;
   } else {
     el.textContent = 'Voice: loading...';
+  }
+  // Show all available English voices for debugging
+  const allEl = document.getElementById('allVoices');
+  if (allEl) {
+    const voices = synth.getVoices();
+    const english = voices.filter(v => v.lang.startsWith('en'));
+    allEl.innerHTML = english.map(v =>
+      `<div style="padding:2px 0;">${v.name} [${v.lang}]</div>`
+    ).join('') || 'No voices loaded yet';
   }
 }
 
