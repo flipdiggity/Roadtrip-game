@@ -515,18 +515,37 @@ let answerRevealed = false;
 const synth = window.speechSynthesis;
 const speakBadge = document.getElementById('speakingBadge');
 
+let chosenVoice = null;
+
+function pickBestVoice() {
+  const voices = synth.getVoices();
+  if (!voices.length) return null;
+
+  // Ranked preference: Premium > Enhanced > quality known voices > any English
+  const tiers = [
+    v => v.lang.startsWith('en') && /premium/i.test(v.name),
+    v => v.lang.startsWith('en') && /enhanced/i.test(v.name),
+    v => v.lang.startsWith('en') && /\b(Ava|Zoe|Allison|Samantha|Karen|Moira|Tessa)\b/i.test(v.name),
+    v => v.lang.startsWith('en-US') && !v.name.includes('Google'),
+    v => v.lang.startsWith('en-US'),
+    v => v.lang.startsWith('en'),
+  ];
+
+  for (const test of tiers) {
+    const match = voices.find(test);
+    if (match) return match;
+  }
+  return voices[0];
+}
+
 function speak(text, onEnd) {
   synth.cancel();
   const utter = new SpeechSynthesisUtterance(text);
-  utter.rate = 0.92;
-  utter.pitch = 1.0;
+  utter.rate = 0.93;
+  utter.pitch = 1.02;
 
-  // Try to pick a good voice
-  const voices = synth.getVoices();
-  const preferred = voices.find(v => v.lang.startsWith('en') && v.name.includes('Female'))
-    || voices.find(v => v.lang.startsWith('en-US'))
-    || voices.find(v => v.lang.startsWith('en'));
-  if (preferred) utter.voice = preferred;
+  if (!chosenVoice) chosenVoice = pickBestVoice();
+  if (chosenVoice) utter.voice = chosenVoice;
 
   utter.onstart = () => speakBadge.classList.add('active');
   utter.onend = () => { speakBadge.classList.remove('active'); if (onEnd) onEnd(); };
@@ -539,10 +558,12 @@ function stopSpeaking() {
   speakBadge.classList.remove('active');
 }
 
-// Pre-load voices
+// Pre-load voices and pick the best one when available
 if (synth.onvoiceschanged !== undefined) {
-  synth.onvoiceschanged = () => synth.getVoices();
+  synth.onvoiceschanged = () => { chosenVoice = pickBestVoice(); };
 }
+// Initial attempt (some browsers load voices synchronously)
+chosenVoice = pickBestVoice();
 
 // ============================================================
 //  SCREEN MANAGEMENT
