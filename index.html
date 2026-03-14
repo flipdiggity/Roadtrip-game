@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
 <title>Road Trip Brain Benders</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -310,6 +312,7 @@
 
   <div class="category-grid" id="categoryGrid"></div>
 
+  <div id="voiceInfo" style="color:var(--text-dim);font-size:0.85em;"></div>
   <button class="big-btn" onclick="startGame()">Let's Go!</button>
 </div>
 
@@ -544,7 +547,8 @@ function speak(text, onEnd) {
   utter.rate = 0.93;
   utter.pitch = 1.02;
 
-  if (!chosenVoice) chosenVoice = pickBestVoice();
+  // Always re-pick voice to catch newly downloaded voices
+  chosenVoice = pickBestVoice();
   if (chosenVoice) utter.voice = chosenVoice;
 
   utter.onstart = () => speakBadge.classList.add('active');
@@ -558,12 +562,25 @@ function stopSpeaking() {
   speakBadge.classList.remove('active');
 }
 
+function updateVoiceInfo() {
+  chosenVoice = pickBestVoice();
+  const el = document.getElementById('voiceInfo');
+  if (chosenVoice) {
+    el.textContent = 'Voice: ' + chosenVoice.name;
+  } else {
+    el.textContent = 'Voice: loading...';
+  }
+}
+
 // Pre-load voices and pick the best one when available
 if (synth.onvoiceschanged !== undefined) {
-  synth.onvoiceschanged = () => { chosenVoice = pickBestVoice(); };
+  synth.onvoiceschanged = updateVoiceInfo;
 }
 // Initial attempt (some browsers load voices synchronously)
-chosenVoice = pickBestVoice();
+updateVoiceInfo();
+// iOS Safari sometimes needs a delay to load voices
+setTimeout(updateVoiceInfo, 500);
+setTimeout(updateVoiceInfo, 2000);
 
 // ============================================================
 //  SCREEN MANAGEMENT
