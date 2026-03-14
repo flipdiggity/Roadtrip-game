@@ -312,11 +312,13 @@
 
   <div class="category-grid" id="categoryGrid"></div>
 
-  <div id="voiceInfo" style="color:var(--text-dim);font-size:0.85em;"></div>
-  <details style="color:var(--text-dim);font-size:0.75em;max-width:400px;width:100%;">
-    <summary>Show all available voices</summary>
-    <div id="allVoices" style="max-height:200px;overflow-y:auto;text-align:left;padding:8px;background:var(--card);border-radius:8px;margin-top:6px;"></div>
-  </details>
+  <div style="width:100%;max-width:400px;background:var(--card);border-radius:14px;padding:16px;">
+    <label style="color:var(--text-dim);font-size:0.85em;display:block;margin-bottom:6px;">Voice</label>
+    <select id="voiceSelect" onchange="onVoiceChange()" style="width:100%;padding:10px;border-radius:8px;background:#2a2a4a;color:var(--text);border:1px solid var(--accent2);font-size:1em;"></select>
+    <label style="color:var(--text-dim);font-size:0.85em;display:block;margin-top:12px;margin-bottom:6px;">Speed: <span id="speedLabel">Normal</span></label>
+    <input type="range" id="speedSlider" min="0.6" max="1.3" step="0.05" value="0.93" oninput="onSpeedChange()" style="width:100%;accent-color:var(--accent);">
+    <button onclick="testVoice()" style="margin-top:10px;width:100%;padding:10px;border-radius:8px;background:var(--accent2);color:#fff;border:none;font-size:0.95em;cursor:pointer;">Test Voice</button>
+  </div>
   <button class="big-btn" onclick="startGame()">Let's Go!</button>
 </div>
 
@@ -523,36 +525,72 @@ const synth = window.speechSynthesis;
 const speakBadge = document.getElementById('speakingBadge');
 
 let chosenVoice = null;
+let speechRate = 0.93;
+let allEnglishVoices = [];
 
-function pickBestVoice() {
+function loadVoices() {
   const voices = synth.getVoices();
-  if (!voices.length) return null;
+  allEnglishVoices = voices.filter(v => v.lang.startsWith('en'));
 
-  // Ranked preference: Premium > Enhanced > quality known voices > any English
-  const tiers = [
-    v => v.lang.startsWith('en') && /premium/i.test(v.name),
-    v => v.lang.startsWith('en') && /enhanced/i.test(v.name),
-    v => v.lang.startsWith('en') && /\b(Ava|Zoe|Allison|Samantha|Karen|Moira|Tessa)\b/i.test(v.name),
-    v => v.lang.startsWith('en-US') && !v.name.includes('Google'),
-    v => v.lang.startsWith('en-US'),
-    v => v.lang.startsWith('en'),
-  ];
+  const select = document.getElementById('voiceSelect');
+  if (!select || !allEnglishVoices.length) return;
 
-  for (const test of tiers) {
-    const match = voices.find(test);
-    if (match) return match;
+  const prevValue = select.value;
+  select.innerHTML = '';
+
+  // Sort: prefer known good voices first
+  const preferred = ['Samantha', 'Ava', 'Zoe', 'Allison', 'Karen', 'Moira', 'Tessa', 'Alex'];
+  allEnglishVoices.sort((a, b) => {
+    const aIdx = preferred.findIndex(n => a.name.includes(n));
+    const bIdx = preferred.findIndex(n => b.name.includes(n));
+    const aRank = aIdx >= 0 ? aIdx : 100;
+    const bRank = bIdx >= 0 ? bIdx : 100;
+    return aRank - bRank;
+  });
+
+  allEnglishVoices.forEach((v, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${v.name} (${v.lang})`;
+    select.appendChild(opt);
+  });
+
+  // Restore previous selection or default to first
+  if (prevValue && prevValue < allEnglishVoices.length) {
+    select.value = prevValue;
+  } else {
+    select.value = '0';
   }
-  return voices[0];
+  chosenVoice = allEnglishVoices[parseInt(select.value)] || null;
+}
+
+function onVoiceChange() {
+  const select = document.getElementById('voiceSelect');
+  const idx = parseInt(select.value);
+  chosenVoice = allEnglishVoices[idx] || null;
+}
+
+function onSpeedChange() {
+  const slider = document.getElementById('speedSlider');
+  speechRate = parseFloat(slider.value);
+  const label = document.getElementById('speedLabel');
+  if (speechRate <= 0.7) label.textContent = 'Slow';
+  else if (speechRate <= 0.85) label.textContent = 'Relaxed';
+  else if (speechRate <= 1.0) label.textContent = 'Normal';
+  else if (speechRate <= 1.15) label.textContent = 'Quick';
+  else label.textContent = 'Fast';
+}
+
+function testVoice() {
+  speak("Hey! Ready for some brain benders on this road trip?");
 }
 
 function speak(text, onEnd) {
   synth.cancel();
   const utter = new SpeechSynthesisUtterance(text);
-  utter.rate = 0.93;
+  utter.rate = speechRate;
   utter.pitch = 1.02;
 
-  // Always re-pick voice to catch newly downloaded voices
-  chosenVoice = pickBestVoice();
   if (chosenVoice) utter.voice = chosenVoice;
 
   utter.onstart = () => speakBadge.classList.add('active');
@@ -566,34 +604,13 @@ function stopSpeaking() {
   speakBadge.classList.remove('active');
 }
 
-function updateVoiceInfo() {
-  chosenVoice = pickBestVoice();
-  const el = document.getElementById('voiceInfo');
-  if (chosenVoice) {
-    el.textContent = 'Voice: ' + chosenVoice.name;
-  } else {
-    el.textContent = 'Voice: loading...';
-  }
-  // Show all available English voices for debugging
-  const allEl = document.getElementById('allVoices');
-  if (allEl) {
-    const voices = synth.getVoices();
-    const english = voices.filter(v => v.lang.startsWith('en'));
-    allEl.innerHTML = english.map(v =>
-      `<div style="padding:2px 0;">${v.name} [${v.lang}]</div>`
-    ).join('') || 'No voices loaded yet';
-  }
-}
-
-// Pre-load voices and pick the best one when available
+// Load voices when available
 if (synth.onvoiceschanged !== undefined) {
-  synth.onvoiceschanged = updateVoiceInfo;
+  synth.onvoiceschanged = loadVoices;
 }
-// Initial attempt (some browsers load voices synchronously)
-updateVoiceInfo();
-// iOS Safari sometimes needs a delay to load voices
-setTimeout(updateVoiceInfo, 500);
-setTimeout(updateVoiceInfo, 2000);
+loadVoices();
+setTimeout(loadVoices, 500);
+setTimeout(loadVoices, 2000);
 
 // ============================================================
 //  SCREEN MANAGEMENT
