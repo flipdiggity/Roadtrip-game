@@ -530,7 +530,10 @@ let allEnglishVoices = [];
 
 function loadVoices() {
   const voices = synth.getVoices();
-  allEnglishVoices = voices.filter(v => v.lang.startsWith('en'));
+
+  // Filter out novelty/joke voices that aren't useful for reading
+  const novelty = /\b(bad news|bahh|bells|boing|bubbles|cellos|wobble|albert|trinoids|whisper|zarvox|jester|organ|superstar|ralph)\b/i;
+  allEnglishVoices = voices.filter(v => v.lang.startsWith('en') && !novelty.test(v.name));
 
   const select = document.getElementById('voiceSelect');
   if (!select || !allEnglishVoices.length) return;
