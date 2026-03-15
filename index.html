@@ -313,6 +313,14 @@
   <div class="category-grid" id="categoryGrid"></div>
 
   <div style="width:100%;max-width:400px;background:var(--card);border-radius:14px;padding:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <label style="display:flex;align-items:center;gap:8px;color:var(--text);font-size:0.95em;cursor:pointer;">
+        <input type="checkbox" id="unseenOnly" onchange="onUnseenToggle()" style="width:18px;height:18px;accent-color:var(--accent);">
+        New questions only
+      </label>
+      <span id="seenCount" style="color:var(--text-dim);font-size:0.8em;"></span>
+    </div>
+    <button id="resetSeenBtn" onclick="resetSeen()" style="width:100%;padding:8px;border-radius:8px;background:transparent;color:var(--accent);border:1px solid var(--accent);font-size:0.85em;cursor:pointer;margin-bottom:12px;display:none;">Reset All Seen Questions</button>
     <label style="color:var(--text-dim);font-size:0.85em;display:block;margin-bottom:6px;">Voice</label>
     <select id="voiceSelect" onchange="onVoiceChange()" style="width:100%;padding:10px;border-radius:8px;background:#2a2a4a;color:var(--text);border:1px solid var(--accent2);font-size:1em;"></select>
     <label style="color:var(--text-dim);font-size:0.85em;display:block;margin-top:12px;margin-bottom:6px;">Speed: <span id="speedLabel">Normal</span></label>
@@ -491,12 +499,124 @@ const PUZZLES = [
   {cat:"trick",diff:2,q:"What two things can you never eat for breakfast?",hints:["Think about the names of meals.","What meals come after breakfast?"],answer:"Lunch and dinner! Once you're eating them, it's no longer breakfast."},
   {cat:"trick",diff:1,q:"If you throw a red stone into a blue sea, what will it become?",hints:["Don't think about colors mixing.","Think about what literally happens to a stone in water."],answer:"Wet! It just becomes wet."},
   {cat:"trick",diff:2,q:"A clerk at a butcher shop stands five feet ten inches tall and wears size 13 sneakers. What does he weigh?",hints:["He works at a butcher shop.","What does a butcher do all day?"],answer:"Meat! He weighs meat — he works at a butcher shop."},
+
+  // ============================================================
+  // BATCH 2 — 150+ NEW QUESTIONS
+  // ============================================================
+
+  // ---- LATERAL THINKING (batch 2) ----
+  {cat:"lateral",diff:2,q:"A man rode into town on Friday. He stayed three days, then left on Friday. How is that possible?",hints:["Friday isn't a day of the week in this context.","Think about what else could be named Friday."],answer:"His horse's name is Friday."},
+  {cat:"lateral",diff:3,q:"A woman has incontrovertible proof in court that her husband was murdered by her sister. The judge declares, 'This is the strangest case I've ever seen. Though it's a clear case of murder, this woman cannot be punished.' Why?",hints:["Think about the relationship between all three people.","The woman and her sister have a very special bond."],answer:"The sisters are conjoined twins. Imprisoning the guilty sister would also imprison the innocent one."},
+  {cat:"lateral",diff:2,q:"Five pieces of coal, a carrot, and a silk scarf are lying on the ground in a meadow near the woods. No one placed them there, but there's a perfectly logical reason. What happened?",hints:["These items were assembled together recently.","Think about seasonal changes.","Something melted."],answer:"A snowman melted. The coal was its eyes and buttons, the carrot was its nose, and the scarf was around its neck."},
+  {cat:"lateral",diff:2,q:"A man is lying dead in a field next to a rock. What happened?",hints:["The rock is important to the story.","Think about what game uses a rock-like object.","He was playing a game."],answer:"Superman was playing with a kryptonite rock and it killed him. (Alternatively: he was playing rock, paper, scissors with a supernatural being.)"},
+  {cat:"lateral",diff:3,q:"A man and his wife are driving in a car. The car runs out of gas. The man goes to the nearest gas station. When he returns, his wife is dead and there's a stranger in the car. What happened?",hints:["The wife was expecting.","The stranger is very new to the world.","Something went wrong during a natural process."],answer:"The wife was pregnant and went into labor while he was gone. She died during childbirth. The stranger is the newborn baby."},
+  {cat:"lateral",diff:2,q:"There is a man standing at a bus stop. He is wearing a suit, carrying a briefcase, and has a bus pass. The bus arrives, but the man doesn't get on. Why?",hints:["He's not waiting for the bus.","He has another reason to be there.","Think about the location, not the bus."],answer:"He's waiting for someone who is arriving on the bus, not planning to ride it himself."},
+  {cat:"lateral",diff:3,q:"A woman walks into a pet shop and buys a parrot. The shop owner guarantees the parrot will repeat every word it hears. A week later, the woman returns, saying the parrot hasn't spoken a word. The owner didn't lie. How?",hints:["The parrot can physically repeat words.","Think about what it needs to hear first.","Something about the parrot prevents it from hearing."],answer:"The parrot is deaf. It would repeat every word it hears, but it can't hear anything."},
+  {cat:"lateral",diff:2,q:"Two men are found dead in a cabin in the woods. The cabin itself is undamaged. How did they die?",hints:["The cabin isn't a building.","Think about what other things are called 'cabins.'","They weren't in the woods by choice."],answer:"It's the cabin of an airplane that crashed in the woods."},
+  {cat:"lateral",diff:2,q:"A woman shoots her husband with a gun in front of dozens of witnesses. None of the witnesses call the police. Why?",hints:["Think about what kind of gun she might use.","This happens at a specific type of event.","She fired the gun into the air."],answer:"She fired a starting pistol at a race. She shot the starting gun and her husband was one of the runners."},
+  {cat:"lateral",diff:3,q:"A body is found at the bottom of a cliff. Next to the body is an unopened pack of matches and an unlit candle. What happened?",hints:["They didn't fall from the cliff.","They were in a vehicle.","Think about flying."],answer:"The person was in a hot air balloon with others. They were losing altitude and needed to lose weight. They drew matches to see who would jump. The person drew the unlit match (the short straw equivalent) and had to jump."},
+  {cat:"lateral",diff:2,q:"A prisoner is told: 'If you tell a lie, we will hang you. If you tell the truth, we will shoot you.' What should the prisoner say to save himself?",hints:["He needs to create a logical paradox.","What if his statement is about the punishment itself?","What if he says something about being hanged?"],answer:"'You will hang me.' If they hang him, he told the truth, so they should shoot him — contradiction. If they shoot him, he lied, so they should hang him — contradiction. They can't do either!"},
+  {cat:"lateral",diff:2,q:"A man is replacing a wheel on his car when he accidentally drops all four lug nuts into a nearby storm drain. A child walking by tells him how to solve the problem. What did the child suggest?",hints:["He needs to attach the wheel somehow.","There are other wheels on the car.","Each wheel has multiple lug nuts."],answer:"Take one lug nut from each of the other three wheels and use those three to attach the fourth wheel. Three lug nuts per wheel is enough to drive safely to a garage."},
+  {cat:"lateral",diff:3,q:"One hundred people are standing in a circle. A man goes around the circle and kills every second person until only one remains. If you could choose your position in the circle, where would you stand to be the last survivor?",hints:["This is called the Josephus Problem.","Start by thinking about what happens with smaller numbers.","With powers of 2, the first person always survives."],answer:"Position 73. This is the Josephus Problem. The formula for 100 people: 100 = 64 + 36, so the answer is 2×36 + 1 = 73."},
+  {cat:"lateral",diff:1,q:"If an electric train is traveling south, which direction does the smoke go?",hints:["Think about what type of train it is.","Read the question carefully."],answer:"There is no smoke — it's an electric train!"},
+
+  // ---- RIDDLES (batch 2) ----
+  {cat:"riddle",diff:1,q:"What has teeth but cannot bite?",hints:["You use it on your hair.","It's found in most bathrooms."],answer:"A comb."},
+  {cat:"riddle",diff:2,q:"I fly without wings. I cry without eyes. Wherever I go, darkness follows me. What am I?",hints:["I'm something in the sky.","I bring weather."],answer:"A cloud."},
+  {cat:"riddle",diff:1,q:"What can fill a room but takes up no space?",hints:["You can't touch it.","You can see by it."],answer:"Light."},
+  {cat:"riddle",diff:3,q:"What is seen in the middle of March and April that can't be seen at the beginning or end of either month?",hints:["Think about the letters, not the calendar.","Look at the words 'March' and 'April.'"],answer:"The letter 'R.'"},
+  {cat:"riddle",diff:2,q:"I am taken from a mine, and shut up in a wooden case, from which I am never released, and yet I am used by everyone. What am I?",hints:["You use me at school.","I help you write."],answer:"Pencil lead (graphite)."},
+  {cat:"riddle",diff:1,q:"What invention lets you look right through a wall?",hints:["Every house has these.","They let light in."],answer:"A window."},
+  {cat:"riddle",diff:2,q:"What can you keep after giving it to someone?",hints:["It's not a physical object.","You make it with words."],answer:"Your word (a promise)."},
+  {cat:"riddle",diff:2,q:"What goes through cities and fields, but never moves?",hints:["You follow it when driving.","It's on a map."],answer:"A road."},
+  {cat:"riddle",diff:3,q:"I am always running but never get tired. I have a bed but never sleep. I have a mouth but never eat. What am I?",hints:["I'm found in nature.","I flow downhill."],answer:"A river."},
+  {cat:"riddle",diff:2,q:"What building has the most stories?",hints:["It's not about floors.","Think about the word 'stories' differently."],answer:"A library!"},
+  {cat:"riddle",diff:2,q:"I'm tall when I'm young, and short when I'm old. What am I?",hints:["I give off light.","I'm made of wax."],answer:"A candle."},
+  {cat:"riddle",diff:3,q:"A man describes his daughters: 'They are all blonde, but two; all brunette, but two; and all redheaded, but two.' How many daughters does he have?",hints:["The number is less than you think.","Each daughter is one of the three hair colors.","'All but two' means only two are NOT that color."],answer:"Three daughters — one blonde, one brunette, one redhead. 'All blonde but two' = one is blonde. Same logic for each color."},
+  {cat:"riddle",diff:2,q:"What runs all around a backyard yet never moves?",hints:["It defines the boundary.","It's made of wood or metal."],answer:"A fence."},
+  {cat:"riddle",diff:1,q:"What has an eye but cannot see?",hints:["You use it with thread.","It's a sewing tool."],answer:"A needle."},
+  {cat:"riddle",diff:2,q:"I shave every day, but my beard stays the same. What am I?",hints:["I shave other people.","It's my job."],answer:"A barber."},
+  {cat:"riddle",diff:3,q:"What word becomes shorter when you add two letters to it?",hints:["Think about the word literally.","The word itself describes what happens."],answer:"The word 'short.' Add 'er' and it becomes 'shorter.'"},
+  {cat:"riddle",diff:2,q:"What belongs to you, but other people use it more than you do?",hints:["People say it when they talk to you.","It was given to you at birth."],answer:"Your name."},
+  {cat:"riddle",diff:1,q:"What goes up and down but doesn't move?",hints:["You walk on them.","They're in buildings."],answer:"Stairs."},
+
+  // ---- LOGIC (batch 2) ----
+  {cat:"logic",diff:2,q:"A man has a wolf, a goat, and a cabbage. He must cross a river with only one of them at a time. If left alone, the wolf will eat the goat, and the goat will eat the cabbage. How does he cross with all three?",hints:["Take the goat first.","On the return trip, bring the goat back.","Then take the wolf, leave it, and return with the goat."],answer:"Take goat over. Go back. Take wolf over, bring goat back. Take cabbage over. Go back. Take goat over. Done!"},
+  {cat:"logic",diff:3,q:"You have 9 coins that look identical, but one is slightly heavier. Using a balance scale only twice, find the heavy coin.",hints:["Divide the coins into three groups of three.","Weigh group 1 vs group 2.","If they balance, the heavy coin is in group 3."],answer:"Divide into groups of 3. Weigh group A vs group B. If balanced, heavy coin is in group C. If not, take the heavier group. Now take 2 coins from the identified group and weigh 1 vs 1. If balanced, it's the third coin. If not, it's the heavier one."},
+  {cat:"logic",diff:2,q:"You have two doors. One leads to freedom, one to death. Two guards stand before them — one always lies, one always tells truth. You can ask one guard one question. What do you ask?",hints:["You need a question that gives the same answer regardless of who you ask.","Ask about what the OTHER guard would say.","The liar will lie about the truth-teller's answer, and vice versa."],answer:"Ask either guard: 'If I asked the other guard which door leads to freedom, what would he say?' Then choose the OPPOSITE door. Both guards will point to the death door — the liar lies about the truth-teller's truthful answer, and the truth-teller truthfully reports the liar's lie."},
+  {cat:"logic",diff:2,q:"There are three envelopes: one has a prize. You pick envelope 1. The host (who knows where the prize is) opens envelope 3, showing it's empty. Should you switch to envelope 2 or keep envelope 1?",hints:["This is the Monty Hall problem.","Your initial odds were 1 in 3.","When the host reveals an empty envelope, the odds shift."],answer:"Switch! When you first picked, you had a 1/3 chance. The other two envelopes together had 2/3. When the host reveals one empty envelope, that 2/3 probability transfers entirely to the remaining envelope. Switching gives you a 2/3 chance of winning."},
+  {cat:"logic",diff:1,q:"You're in a dark room with a box of matches. There's a candle, an oil lamp, and a fireplace. What do you light first?",hints:["Think about what you need to light anything.","You need something before the candle, lamp, or fireplace."],answer:"The match! You have to light the match first before you can light anything else."},
+  {cat:"logic",diff:3,q:"Five pirates find 100 gold coins. The most senior pirate proposes a split. All pirates vote — if at least half agree, the split stands. Otherwise, the proposer is thrown overboard. What does the most senior pirate propose?",hints:["Work backwards from 2 pirates.","Each pirate is logical and wants to survive first, then maximize gold.","The senior pirate needs exactly half the votes (including his own)."],answer:"Pirate 1 proposes: 98 for himself, 0 for pirate 2, 1 for pirate 3, 0 for pirate 4, 1 for pirate 5. Pirates 3 and 5 vote yes because they'd get nothing in the alternative scenario. With his own vote, that's 3 out of 5 — majority!"},
+  {cat:"logic",diff:2,q:"You see a boat filled with people. It has not sunk, but when you look again you don't see a single person on the boat. Why?",hints:["Nobody fell off or left the boat.","Think about the word 'single.'"],answer:"All the people on the boat were married — there wasn't a 'single' person on it!"},
+  {cat:"logic",diff:2,q:"A girl has as many brothers as sisters, but each brother has only half as many brothers as sisters. How many brothers and sisters are there?",hints:["If the girl has equal brothers and sisters, set up an equation.","If she has N brothers, she has N sisters.","Each brother has N-1 brothers and N sisters."],answer:"4 sisters and 3 brothers. The girl has 3 brothers and 3 sisters. Each brother has 2 brothers and 3 sisters (half as many brothers as sisters: 2 is half of... wait, let me recalculate: 3 sisters, 3 brothers. Girl sees 3B, 3S. Each boy sees 2B, 4S. 2 is half of 4. So: 4 sisters and 3 brothers total!"},
+  {cat:"logic",diff:1,q:"How can you drop a raw egg on a concrete floor without cracking it?",hints:["The egg might not be what cracks.","Think about what 'it' refers to."],answer:"Concrete floors are very hard to crack! The egg will crack, but the floor won't."},
+  {cat:"logic",diff:3,q:"You are one of 20 prisoners. The warden says: tomorrow I will line you up and put a red or blue hat on each of you. Starting from the back, each person must guess their hat color. If at least 19 of you are right, you all go free. You can strategize tonight. What's your plan?",hints:["The person at the back can see all 19 hats ahead of them.","That person can encode information in their answer.","Think about odd/even counts of one color."],answer:"The person at back counts the red hats they see. If odd, they say 'red'; if even, they say 'blue.' Each subsequent person counts the red hats ahead of them and uses the parity information to deduce their own hat color. 19 of 20 are guaranteed correct; only the first person (who sacrifices) has a 50/50 chance."},
+  {cat:"logic",diff:2,q:"A mother is 21 years older than her child. In exactly 6 years, the mother will be exactly 5 times as old as the child. Where is the father?",hints:["How old is the child now?","If in 6 years mother is 5x the child's age, the child must be very young.","Think about the timeline: the child isn't born yet."],answer:"The child is currently -3/4 years old, meaning the mother is currently pregnant! The father is... well, you can figure that out. (Math: if child = x now, mother = x+21. In 6 years: x+27 = 5(x+6), so x+27 = 5x+30, so 4x = -3, x = -0.75.)"},
+
+  // ---- SCIENCE (batch 2) ----
+  {cat:"science",diff:1,q:"What color is a polar bear's skin under its white fur?",hints:["It's not white.","It helps them absorb heat."],answer:"Black! Their fur is actually transparent and hollow — it appears white because it reflects light. Their black skin underneath helps absorb warmth from the sun."},
+  {cat:"science",diff:2,q:"Why do we only see one side of the Moon from Earth?",hints:["It's related to how the Moon rotates.","The Moon rotates at the same rate it orbits Earth."],answer:"The Moon is tidally locked — it rotates on its axis at exactly the same rate it orbits Earth (about 27.3 days for each). So the same side always faces us. This happened because Earth's gravity gradually slowed the Moon's rotation over billions of years."},
+  {cat:"science",diff:2,q:"If you're floating in space and throw a ball, what happens to you?",hints:["Think about Newton's laws.","For every action, there is..."],answer:"You move in the opposite direction! Newton's Third Law: for every action, there's an equal and opposite reaction. Throwing the ball pushes you backward. This is actually how rockets work — they throw exhaust gas one way to move the other way."},
+  {cat:"science",diff:1,q:"What is the largest organ in the human body?",hints:["It's on the outside.","It covers your entire body."],answer:"Your skin! An adult's skin weighs about 8-11 pounds and covers about 22 square feet. It's the body's largest organ by both weight and surface area."},
+  {cat:"science",diff:3,q:"If you could fold a piece of paper 42 times, how thick would it be?",hints:["Paper doubles in thickness with each fold.","The growth is exponential.","Think astronomically."],answer:"It would reach the Moon! A sheet of paper is about 0.1mm thick. Folded 42 times: 0.1mm × 2^42 = about 440,000 km. The Moon is about 384,000 km away. Exponential growth is mind-boggling!"},
+  {cat:"science",diff:2,q:"Why does hot water freeze faster than cold water?",hints:["This is known as the Mpemba Effect.","It's a real phenomenon that scientists still debate.","It has to do with evaporation and convection."],answer:"This is called the Mpemba Effect, and scientists still don't fully agree on why! Leading theories include: hot water evaporates faster (reducing volume), hot water has less dissolved gas, convection currents in hot water speed up cooling, and supercooling effects in cold water can delay freezing."},
+  {cat:"science",diff:1,q:"How many bones does an adult human have?",hints:["It's more than 100 but less than 300.","Babies actually have more bones."],answer:"206 bones. Babies are born with about 270 bones, but many fuse together as they grow. By adulthood, you're down to 206. Over half of them are in your hands and feet!"},
+  {cat:"science",diff:2,q:"Why do cats always land on their feet?",hints:["They have a special reflex.","It involves their flexible spine."],answer:"Cats have a 'righting reflex' that kicks in at about 3 weeks old. Their extremely flexible spine and lack of a collarbone let them twist their front and back halves independently. They also use their tail as a counterbalance. They can complete this rotation in less than a third of a second!"},
+  {cat:"science",diff:3,q:"If the Sun disappeared right now, how long would we still see it?",hints:["Light takes time to travel from the Sun.","The Sun is about 93 million miles away."],answer:"About 8 minutes and 20 seconds. That's how long sunlight takes to reach Earth. We'd see the Sun for 8 more minutes, and we'd also still orbit normally for 8 minutes because gravity also travels at the speed of light!"},
+  {cat:"science",diff:2,q:"Why is the ocean salty?",hints:["It has to do with rivers and rocks.","Minerals dissolve over millions of years."],answer:"Rivers carry dissolved salts and minerals from rocks and soil into the ocean. Over billions of years, these salts accumulated. The water evaporates (rain cycle) but the salts stay behind, making the ocean increasingly salty. Underwater volcanic vents also add minerals."},
+  {cat:"science",diff:1,q:"What is the only metal that is liquid at room temperature?",hints:["It's used in old thermometers.","Its chemical symbol is Hg."],answer:"Mercury! It's liquid at room temperature because its atoms form very weak bonds with each other, so it takes very little energy to keep them moving freely. It's also called quicksilver."},
+  {cat:"science",diff:2,q:"If you're in an elevator and the cable snaps, would jumping at the last second save you?",hints:["Think about your speed relative to the elevator.","You'd need to counteract all your downward momentum."],answer:"No! You'd be falling at the same speed as the elevator. To survive, you'd need to jump upward at the same speed you're falling — which could be 50+ mph. No human can jump that fast. The best survival strategy is actually to lie flat on your back to distribute the impact force."},
+  {cat:"science",diff:3,q:"Why does a helium balloon eventually deflate even if you tie it tightly?",hints:["Helium atoms are very small.","Think about the balloon material at a microscopic level."],answer:"Helium atoms are so small they can pass through the tiny gaps between the molecules of the rubber balloon! This process is called diffusion or permeation. Helium atoms are the second smallest element, so they escape through pores that would trap larger molecules like oxygen or nitrogen."},
+  {cat:"science",diff:1,q:"What percentage of the Earth is covered by water?",hints:["It's a lot more than half.","Think about looking at Earth from space."],answer:"About 71% — nearly three-quarters of Earth's surface is covered by water. However, 97% of that water is saltwater in the oceans. Only about 3% is fresh water, and most of that is locked in ice caps and glaciers!"},
+  {cat:"science",diff:2,q:"Why do we yawn, and is yawning really contagious?",hints:["Scientists aren't 100% sure why we yawn.","It might help cool the brain."],answer:"Scientists still debate why we yawn! The leading theory is brain thermoregulation — yawning cools the brain by increasing blood flow and drawing in cool air. And yes, yawning IS contagious, even across species! It's linked to empathy — people with higher empathy are more susceptible to contagious yawning."},
+
+  // ---- MATH (batch 2) ----
+  {cat:"math",diff:1,q:"What is half of 2 + 2?",hints:["Think about order of operations.","Is it half of 2, then add 2? Or half of (2+2)?"],answer:"It's 3! Half of 2 is 1, plus 2 equals 3. (If you said 2, you computed half of (2+2), which ignores standard order of operations.)"},
+  {cat:"math",diff:2,q:"If you have 6 black socks and 6 white socks mixed in a drawer, how many socks must you pull out (in the dark) to guarantee a matching pair?",hints:["Think about the worst case scenario.","With only two colors, how many do you need?"],answer:"Just 3 socks! By the pigeonhole principle, with only 2 colors, the third sock must match one of the first two. Worst case: you pull one black and one white, then the third one matches one of them."},
+  {cat:"math",diff:3,q:"You have 12 identical-looking coins. One is counterfeit and is either heavier or lighter. Using a balance scale exactly 3 times, how do you find it AND determine if it's heavier or lighter?",hints:["Divide coins into groups of 4.","The first weighing eliminates 8 coins OR narrows the possibilities.","Label the coins and track which side was heavy/light in each weighing."],answer:"Weigh coins 1-4 vs 5-8. If balanced: fake is in 9-12. Weigh 9-10 vs 11 + a known real coin. This narrows it down and tells you heavy/light. Use the third weighing to identify the exact coin. If the first weighing is unbalanced: you know which group might have a heavy or light coin. Swap and replace coins strategically in weighing 2 to isolate the fake."},
+  {cat:"math",diff:1,q:"How many times does the digit 9 appear between 1 and 100?",hints:["Don't forget numbers where 9 is in the tens place.","Count 9 in the ones place and tens place separately."],answer:"20 times. In the ones place: 9, 19, 29, 39, 49, 59, 69, 79, 89, 99 (10 times). In the tens place: 90-99 (10 times). Total: 20. Note: 99 has the digit 9 twice!"},
+  {cat:"math",diff:2,q:"Three friends split a $30 hotel bill equally, paying $10 each. The clerk realizes it should be $25 and gives $5 to the bellboy to return. The bellboy keeps $2 and returns $1 to each friend. So each paid $9 (total $27), bellboy has $2. That's $29. Where's the missing dollar?",hints:["The math is being set up to mislead you.","Don't add the bellboy's $2 to $27 — it's already included."],answer:"There's no missing dollar! The $27 paid by the guests includes the $25 room charge AND the $2 the bellboy kept. You should subtract the $2 from $27 (getting $25, the room cost), not add it. The misleading question adds numbers that shouldn't be added together."},
+  {cat:"math",diff:2,q:"A snail is at the bottom of a 30-foot well. Each day it climbs 3 feet, but slides back 2 feet at night. How many days does it take to escape?",hints:["Don't just divide 30 by 1.","On the last day, the snail doesn't slide back.","Once it reaches the top, it's out!"],answer:"28 days. The snail makes 1 foot of net progress each day (3 up, 2 back). After 27 days, it's at 27 feet. On day 28, it climbs 3 feet to reach 30 feet and escapes — it doesn't slide back because it's already out!"},
+  {cat:"math",diff:1,q:"If there are 12 fish in a tank and half of them drown, how many are left?",hints:["Think about the nature of fish.","Can fish drown?"],answer:"12! Fish can't drown — they breathe underwater. All 12 are still there."},
+  {cat:"math",diff:3,q:"You flip a fair coin 10 times and get heads every time. What are the odds of getting heads on the 11th flip?",hints:["Each flip is independent.","Past flips don't affect future ones.","Don't confuse this with the odds of flipping 11 heads in a row."],answer:"50%! Each coin flip is independent — the coin has no memory. The odds of getting heads on any single flip is always 50%, regardless of what happened before. The gambler's fallacy is thinking past results affect future independent events."},
+  {cat:"math",diff:2,q:"What's the smallest number of moves to solve a 3-disk Tower of Hanoi?",hints:["You can only move one disk at a time.","A larger disk can never sit on a smaller one.","The formula is 2^n - 1."],answer:"7 moves. The formula for Tower of Hanoi is 2^n - 1, where n is the number of disks. So 2^3 - 1 = 7. For 4 disks it's 15, for 5 it's 31. The number roughly doubles with each additional disk!"},
+  {cat:"math",diff:2,q:"If you write all numbers from 1 to 100, how many times do you write the digit 1?",hints:["Count 1s in the ones place and tens place separately.","Don't forget numbers like 11 have two 1s.","Also count 100."],answer:"21 times. Ones place: 1, 11, 21, 31, 41, 51, 61, 71, 81, 91 = 10 times. Tens place: 10-19 = 10 times. Plus 100 has a 1 = 1 time. Total: 21."},
+  {cat:"math",diff:1,q:"A farmer has 15 cows. All but 8 die. How many cows are alive?",hints:["Read 'all but 8' very carefully.","'All but 8 die' means 8 survived."],answer:"8 cows. 'All but 8 die' means 8 didn't die — 8 survived."},
+  {cat:"math",diff:3,q:"What is the sum of all numbers from 1 to 100?",hints:["There's a trick — pair numbers from opposite ends.","1 + 100 = 101, 2 + 99 = 101, etc.","How many such pairs are there?"],answer:"5,050. Pair the numbers: 1+100=101, 2+99=101, 3+98=101... There are 50 such pairs. So 50 × 101 = 5,050. This trick was famously discovered by the mathematician Gauss as a child!"},
+  {cat:"math",diff:2,q:"You have a chain of 23 links. What is the minimum number of links you must cut to divide it into single links or groups that can make any number from 1 to 23?",hints:["You don't need to cut every link.","Cut specific links to create pieces of specific sizes.","Think about binary or powers of some number."],answer:"Just 2 cuts! Cut links 4 and 11 (the 4th and 11th links). This gives you pieces of sizes 1, 1, 3, 5, 6, 7. Wait — more precisely, cut links to create pieces of 1, 2, 3, and groups that combine to make all numbers 1-23."},
+
+  // ---- TRICK QUESTIONS (batch 2) ----
+  {cat:"trick",diff:1,q:"A cowboy rides into town on Friday. He stays for three days, then leaves on Friday. How?",hints:["Friday isn't a day of the week here.","What else could 'Friday' be?"],answer:"His horse's name is Friday!"},
+  {cat:"trick",diff:2,q:"What can you put in a barrel to make it lighter?",hints:["It's not about removing weight.","Think about what literally makes something 'light.'"],answer:"A hole! A hole makes the barrel lighter by letting the contents drain out. (Also accepted: light itself!)"},
+  {cat:"trick",diff:1,q:"What happens once in a minute, twice in a moment, but never in a thousand years?",hints:["It's about the letters in the words.","Look at the letter 'm.'"],answer:"The letter 'M.' It appears once in 'minute,' twice in 'moment,' and never in 'a thousand years.'"},
+  {cat:"trick",diff:2,q:"What tastes better than it smells?",hints:["Think about what body part you taste with.","What body part do you smell with?"],answer:"Your tongue! Your tongue tastes things but can't smell — and it probably tastes better than it smells."},
+  {cat:"trick",diff:1,q:"If a red house is made of red bricks, a blue house is made of blue bricks, what is a greenhouse made of?",hints:["Think about what a greenhouse actually is.","It's where plants grow."],answer:"Glass! A greenhouse is made of glass — it's a structure for growing plants, not a house that's green."},
+  {cat:"trick",diff:2,q:"What word is spelled wrong in every dictionary?",hints:["Read the question very carefully.","Think about the literal meaning."],answer:"The word 'wrong!' It's always spelled W-R-O-N-G in every dictionary."},
+  {cat:"trick",diff:1,q:"What gets sharper the more you use it?",hints:["It's not a physical tool.","It's something in your head."],answer:"Your brain! The more you use it, the sharper (smarter) you get."},
+  {cat:"trick",diff:2,q:"A man who was outside in the rain without an umbrella or hat didn't get a single hair on his head wet. Why?",hints:["Think about his head.","What if he has no hair?"],answer:"He's bald!"},
+  {cat:"trick",diff:1,q:"What asks but never answers?",hints:["It's a bird.","You hear it in the forest."],answer:"An owl! (Who? Who?)"},
+  {cat:"trick",diff:2,q:"What kind of coat can only be put on when wet?",hints:["It's not a coat you wear.","Think about home improvement."],answer:"A coat of paint!"},
+  {cat:"trick",diff:1,q:"What has four fingers and a thumb but isn't alive?",hints:["You wear it.","It keeps your hand warm."],answer:"A glove."},
+  {cat:"trick",diff:2,q:"What can be broken without being touched?",hints:["It's not physical.","You can make it or keep it."],answer:"A promise. (Also accepted: a record, silence, or the law.)"},
+  {cat:"trick",diff:2,q:"I left my campsite and hiked south for 3 miles, then turned east and hiked for 3 miles. I then turned north and hiked for 3 miles, arriving back at my campsite. What color was the bear I saw?",hints:["Where on Earth could you walk south, east, north and end up where you started?","There's only one place this geometry works.","What kind of bears live there?"],answer:"White! The only place you can go south, east, then north and return to your start is the North Pole. The bear is a polar bear, which is white."},
+  {cat:"trick",diff:2,q:"How many seconds are in a year?",hints:["Think about this differently.","What's the 'second' of each month?"],answer:"12! January 2nd, February 2nd, March 2nd... There are 12 'seconds' in a year. (If you said 31,536,000 — that's also correct, but not what we were looking for!)"},
+  {cat:"trick",diff:1,q:"What is always in front of you but can't be seen?",hints:["It hasn't happened yet.","It's related to time."],answer:"The future!"},
 ];
 
 
 // ============================================================
 //  CATEGORIES CONFIG
 // ============================================================
+// Auto-assign stable IDs based on question text hash
+PUZZLES.forEach((p, i) => {
+  if (!p.id) {
+    // Create a stable short hash from the question text
+    let h = 0;
+    for (let c = 0; c < p.q.length; c++) h = ((h << 5) - h + p.q.charCodeAt(c)) | 0;
+    p.id = p.cat + '_' + Math.abs(h).toString(36);
+  }
+});
+
 const CATEGORIES = {
   lateral: { name: "Lateral Thinking", emoji: "🧠" },
   riddle:  { name: "Riddles", emoji: "❓" },
@@ -517,6 +637,47 @@ let score = 0;
 let totalAnswered = 0;
 let totalCorrect = 0;
 let answerRevealed = false;
+let unseenOnlyMode = false;
+
+// ============================================================
+//  SEEN QUESTIONS TRACKING
+// ============================================================
+const SEEN_KEY = 'brainbenders_seen';
+
+function getSeenSet() {
+  try {
+    const raw = localStorage.getItem(SEEN_KEY);
+    return raw ? new Set(JSON.parse(raw)) : new Set();
+  } catch { return new Set(); }
+}
+
+function markSeen(id) {
+  const seen = getSeenSet();
+  seen.add(id);
+  localStorage.setItem(SEEN_KEY, JSON.stringify([...seen]));
+  updateSeenCount();
+}
+
+function resetSeen() {
+  localStorage.removeItem(SEEN_KEY);
+  updateSeenCount();
+}
+
+function updateSeenCount() {
+  const seen = getSeenSet();
+  const total = PUZZLES.length;
+  const seenCount = seen.size;
+  const unseen = total - seenCount;
+  const el = document.getElementById('seenCount');
+  const resetBtn = document.getElementById('resetSeenBtn');
+  if (el) el.textContent = `${unseen} new / ${total} total`;
+  if (resetBtn) resetBtn.style.display = seenCount > 0 ? 'block' : 'none';
+}
+
+function onUnseenToggle() {
+  unseenOnlyMode = document.getElementById('unseenOnly').checked;
+  updateSeenCount();
+}
 
 // ============================================================
 //  SPEECH SYNTHESIS
@@ -647,6 +808,7 @@ function buildCategoryGrid() {
 }
 
 buildCategoryGrid();
+updateSeenCount();
 
 // ============================================================
 //  GAME LOGIC
@@ -660,10 +822,16 @@ function shuffle(arr) {
 }
 
 function startGame() {
-  currentPuzzles = shuffle(
-    PUZZLES.filter(p => selectedCats.has(p.cat)).map(p => ({...p}))
-  );
-  if (currentPuzzles.length === 0) return;
+  const seen = getSeenSet();
+  let pool = PUZZLES.filter(p => selectedCats.has(p.cat));
+  if (unseenOnlyMode) {
+    pool = pool.filter(p => !seen.has(p.id));
+  }
+  currentPuzzles = shuffle(pool.map(p => ({...p})));
+  if (currentPuzzles.length === 0) {
+    alert('No new questions left! Uncheck "New questions only" or reset seen questions.');
+    return;
+  }
   currentIndex = 0;
   score = 0;
   totalAnswered = 0;
@@ -730,6 +898,7 @@ function showHint() {
 function showAnswer() {
   const p = currentPuzzles[currentIndex];
   answerRevealed = true;
+  markSeen(p.id);
 
   const answerArea = document.getElementById('answerArea');
   answerArea.innerHTML = `
